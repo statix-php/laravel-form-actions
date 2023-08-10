@@ -1,0 +1,23 @@
+<?php 
+
+namespace {{ NAMESPACE }};
+
+use Statix\FormAction\FormAction;
+
+class {{ CLASS_NAME }} extends FormAction
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    public function rules(): array
+    {
+        return [];
+    }
+
+    public function handle(): void
+    {
+        //
+    }
+}

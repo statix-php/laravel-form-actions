@@ -25,6 +25,8 @@ class FormAction
         }
 
         $this->setRequest($this->request);
+
+        $this->configure();
     }
 
     public static function make(Container $app = null, Request $request = null): static
@@ -35,5 +37,10 @@ class FormAction
     public static function test(string $action): FormActionTester
     {
         return new FormActionTester($action);
+    }
+
+    public function configure(): void
+    {
+        //
     }
 }
