@@ -260,4 +260,11 @@ trait SupportsValidationFeatures
 
         return $this;
     }
+
+    public function addError(string $key, string $message): static
+    {
+        $this->validator->errors()->add($key, $message);
+
+        return $this;
+    }
 }
