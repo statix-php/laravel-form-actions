@@ -45,14 +45,8 @@ class FormActionTester
 
     public function set(array|string $key, mixed $value = null): static
     {
-        if(is_array($key)) {
-            $this->request->merge($key);
-        } else {
-            $this->request->merge([$key => $value]);
-        }
-
-        $this->action->setRequest($this->request);
-
+        $this->action->set($key, $value);
+        
         return $this;
     }
 }

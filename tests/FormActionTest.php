@@ -1,6 +1,5 @@
 <?php
 
-use PHPUnit\Event\Code\Test;
 use Statix\FormAction\FormAction;
 
 // test the action can be instantiated
