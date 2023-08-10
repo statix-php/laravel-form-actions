@@ -2,9 +2,30 @@
 
 namespace Statix\FormAction\Concerns;
 
+use Illuminate\Auth\Access\AuthorizationException;
+
 trait SupportsAuthorizationFeatures
 {
     protected bool $shouldAuthorize = true;
+
+    public function isAuthorizationRequired(): bool
+    {
+        return $this->shouldAuthorize;
+    }
+
+    public function withAuthorization(): static
+    {
+        $this->shouldAuthorize = true;
+
+        return $this;
+    }
+
+    public function withoutAuthorization(): static
+    {
+        $this->shouldAuthorize = false;
+
+        return $this;
+    }
 
     /**
      * The array of callbacks to run before authorization
@@ -43,11 +64,13 @@ trait SupportsAuthorizationFeatures
         return $this;
     }
 
-    public function runAfterAuthorizationCallbacks(): void
+    public function runAfterAuthorizationCallbacks(): static
     {
         foreach ($this->afterAuthorizationCallbacks as $callback) {
             $this->app->call($callback, ['action' => $this]);
         }
+
+        return $this;
     }
 
     /**
@@ -57,29 +80,52 @@ trait SupportsAuthorizationFeatures
      */
     protected array $onFailedAuthorizationCallbacks = [];
 
-    public function runOnFailedAuthorizationCallbacks(): void
+    public function onFailedAuthorization(callable $callback): static
+    {
+        $this->onFailedAuthorizationCallbacks[] = $callback;
+
+        return $this;
+    }
+
+    public function runOnFailedAuthorizationCallbacks(): static
     {
         foreach ($this->onFailedAuthorizationCallbacks as $callback) {
             $this->app->call($callback, ['action' => $this]);
         }
-    }
-
-    public function withAuthorization(): static
-    {
-        $this->shouldAuthorize = true;
 
         return $this;
     }
 
-    public function withoutAuthorization(): static
+    public function failedAuthorization()
     {
-        $this->shouldAuthorize = false;
+        if(empty($this->onFailedAuthorizationCallbacks)) {
+            throw new AuthorizationException;
+        }
 
-        return $this;
+        $this->runOnFailedAuthorizationCallbacks();
     }
 
-    public function isAuthorizationRequired(): bool
+    public function authorize(): bool
     {
-        return $this->shouldAuthorize;
+        return true;
+    }
+
+    public function authorizeAction(): static
+    {
+        if(! $this->isAuthorizationRequired()) {
+            return true;
+        }
+
+        $this->runBeforeAuthorizationCallbacks();
+
+        $authorized = (bool) $this->app->call([$this, 'authorize']);
+
+        if (! $authorized) {
+            $this->failedAuthorization();
+        }
+
+        $this->runAfterAuthorizationCallbacks();
+
+        return $this;
     }
 }

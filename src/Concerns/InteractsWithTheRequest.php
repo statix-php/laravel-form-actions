@@ -13,6 +13,27 @@ trait InteractsWithTheRequest
         return $this;
     }
 
+    public function has(string|array $key): bool
+    {
+        return $this->request->has($key);
+    }
+
+    public function hasAny(string|array $keys): bool
+    {
+        return $this->request->hasAny($keys);
+    }
+
+    public function hasAll(array $keys): bool
+    {
+        foreach ($keys as $key) {
+            if (! $this->has($key)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function get(string $key, mixed $default = null): mixed
     {
         return $this->request->get($key, $default);
@@ -47,8 +68,27 @@ trait InteractsWithTheRequest
         return $this;
     }
 
-    public function has(string|array $key): bool
+    public function setIfMissing(string|array $key, mixed $value): static
     {
-        return $this->request->has($key);
+        if (is_array($key)) {
+            foreach ($key as $k => $v) {
+                if (! $this->has($k)) {
+                    $this->set($k, $v);
+                }
+            }
+
+            return $this;
+        }
+
+        $this->set($key, $value, replace: false);
+
+        return $this;
+    }
+
+    public function replace(string|array $key, mixed $value): static
+    {
+        $this->set($key, $value, replace: true);
+
+        return $this;
     }
 }

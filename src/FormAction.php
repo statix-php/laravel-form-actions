@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Container\Container;
 use Statix\FormAction\Concerns\InteractsWithTheRequest;
 use Statix\FormAction\Concerns\SupportsAuthorizationFeatures;
+use Statix\FormAction\Concerns\SupportsValidationFeatures;
 
 class FormAction
 {
     use InteractsWithTheRequest,
-        SupportsAuthorizationFeatures;
+        SupportsAuthorizationFeatures,
+        SupportsValidationFeatures;
 
     public function __construct(protected ?Container $app = null, protected ?Request $request = null)
     {
