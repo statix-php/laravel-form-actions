@@ -23,11 +23,11 @@ class CreateFormActionCommand extends Command
         $stubContents = str_replace('{{ NAMESPACE }}', $namespace, $stubContents);
 
         $outputPath = base_path("app/FormActions/{$name}.php");
-        
+
         file_put_contents($outputPath, $stubContents);
 
         $this->info("Form action {$name} created successfully");
-        
+
         $this->info($outputPath);
 
         return self::SUCCESS;
@@ -58,11 +58,11 @@ class CreateFormActionCommand extends Command
             return str()->studly($this->option('namespace'))->trim();
         }
 
-        return str()->studly("App\\FormActions")->trim();
-    }   
+        return str()->studly('App\\FormActions')->trim();
+    }
 
     protected function getStub(): string
     {
-        return __DIR__ . '/stubs/FormAction.stub';
+        return __DIR__.'/stubs/FormAction.stub';
     }
 }

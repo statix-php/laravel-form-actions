@@ -2,17 +2,19 @@
 
 namespace Statix\FormAction;
 
-use Illuminate\Http\Request;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Http\Request;
 use Statix\FormAction\Concerns\InteractsWithTheRequest;
 use Statix\FormAction\Concerns\SupportsAuthorizationFeatures;
+use Statix\FormAction\Concerns\SupportsPublicPropetyMappingFeatures;
 use Statix\FormAction\Concerns\SupportsValidationFeatures;
 
 class FormAction
 {
     use InteractsWithTheRequest,
         SupportsAuthorizationFeatures,
-        SupportsValidationFeatures;
+        SupportsValidationFeatures,
+        SupportsPublicPropetyMappingFeatures;
 
     public function __construct(protected ?Container $app = null, protected ?Request $request = null)
     {
@@ -33,7 +35,7 @@ class FormAction
     {
         return new static($app, $request);
     }
-    
+
     public static function test(string $action): FormActionTester
     {
         return new FormActionTester($action);

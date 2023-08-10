@@ -17,7 +17,7 @@ test('the action can be instantiated using the make method', function () {
     class TestAction extends FormAction
     {
         //
-    };
+    }
 
     $action = TestAction::make();
 
@@ -42,7 +42,7 @@ test('the action calls the configure method on instantiation', function () {
         {
             $this->withoutAuthorization();
         }
-    };
+    }
 
     $action = TestActionNew::make();
 

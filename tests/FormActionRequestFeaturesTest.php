@@ -70,7 +70,7 @@ test('the action can set additional data in the request using a callback', funct
         }
     }
 
-    $action->set('name', function(Service $service) {
+    $action->set('name', function (Service $service) {
         return $service->name();
     }, true);
 

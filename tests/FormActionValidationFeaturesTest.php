@@ -69,7 +69,6 @@ test('the action provides a default validation rules method', function () {
     expect($action->rules())->toBe([]);
 });
 
-
 // the getAllValidationRules discovers rules from the rules method
 test('the getAllValidationRules discovers rules from the rules method', function () {
 

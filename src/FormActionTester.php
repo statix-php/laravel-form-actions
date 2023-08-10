@@ -3,6 +3,7 @@
 namespace Statix\FormAction;
 
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Assert as PHPUnit;
 
 /**
  * Testing API was inspired by Livewire's testing API.
@@ -11,11 +12,6 @@ use Illuminate\Http\Request;
  */
 class FormActionTester
 {
-    /**
-     * The action to test.
-     * 
-     * @var FormAction
-     */
     public $action;
 
     public Request $request;
@@ -27,13 +23,6 @@ class FormActionTester
         $this->action = new $action(request: $this->request);
     }
 
-    public function call(string $method, array $parameters = []): static
-    {
-        $this->action->{$method}(...$parameters);
-
-        return $this;
-    }
-
     public function actingAs($user, string $driver = null): static
     {
         auth()->guard($driver)->setUser($user);
@@ -43,10 +32,49 @@ class FormActionTester
         return $this;
     }
 
-    public function set(array|string $key, mixed $value = null): static
+    public function call(string $method, array $parameters = []): static
     {
-        $this->action->set($key, $value);
-        
+        $this->action->{$method}(...$parameters);
+
+        return $this;
+    }
+
+    public function set(array|string $key, mixed $value = null, bool $replace = false): static
+    {
+        $this->action->set($key, $value, $replace);
+
+        return $this;
+    }
+
+    public function assertUnauthorized(): static
+    {
+        // TODO: implement
+
+        return $this;
+    }
+
+    public function assertSet($name, $value, $strict = false)
+    {
+        if (! $this->action->has($name)) {
+            PHPUnit::fail("Failed asserting that the action has the key '{$name}'");
+        }
+
+        $actual = $this->action->get($name);
+
+        $strict ? PHPUnit::assertSame($value, $actual) : PHPUnit::assertEquals($value, $actual);
+
+        return $this;
+    }
+
+    public function assertSetOld(string $key, mixed $value = null): static
+    {
+        if ($this->action->has($key)) {
+            if ($value != $this->action->get($key)) {
+                throw new \Exception(
+                    "Expected value does not match actual value. \n\nExpected: {$value}\nActual: {$this->action->get($key)}");
+            }
+        }
+
         return $this;
     }
 }

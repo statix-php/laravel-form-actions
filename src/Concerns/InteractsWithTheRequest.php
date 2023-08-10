@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Statix\FormAction\Concerns;
 
@@ -41,8 +41,8 @@ trait InteractsWithTheRequest
 
     public function set(string|array $key, mixed $value = null, bool $replace = false): static
     {
-        if(is_array($key)) {
-            if($replace) {
+        if (is_array($key)) {
+            if ($replace) {
                 $this->request->replace($key);
             } else {
                 $this->request->merge($key);
@@ -51,17 +51,17 @@ trait InteractsWithTheRequest
             return $this;
         }
 
-        if(is_callable($value)) {
+        if (is_callable($value)) {
             $value = $this->app->call($value, ['action' => $this]);
         }
 
-        if($replace) {
+        if ($replace) {
             $this->request->replace([$key => $value]);
 
             return $this;
         }
 
-        if(! $this->request->has($key)) {
+        if (! $this->request->has($key)) {
             $this->request->merge([$key => $value]);
         }
 

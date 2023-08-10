@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Statix\FormAction\Concerns;
 
@@ -98,7 +98,7 @@ trait SupportsAuthorizationFeatures
 
     public function failedAuthorization()
     {
-        if(empty($this->onFailedAuthorizationCallbacks)) {
+        if (empty($this->onFailedAuthorizationCallbacks)) {
             throw new AuthorizationException;
         }
 
@@ -112,7 +112,7 @@ trait SupportsAuthorizationFeatures
 
     public function authorizeAction(): static
     {
-        if(! $this->isAuthorizationRequired()) {
+        if (! $this->isAuthorizationRequired()) {
             return true;
         }
 

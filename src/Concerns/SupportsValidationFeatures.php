@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Statix\FormAction\Concerns;
 
@@ -9,6 +9,15 @@ trait SupportsValidationFeatures
     protected Validator $validator;
 
     protected bool $didValidationPass = false;
+
+    public function validated(string|array|int $key = null, mixed $default = null): mixed
+    {
+        if (! isset($this->validator) && $this->validator instanceof Validator && ! $this->didValidationPass) {
+            throw new \Exception('The validator must be set before calling validated()');
+        }
+
+        return data_get($this->validator->validated(), $key, $default);
+    }
 
     protected bool $shouldValidate = true;
 
@@ -152,6 +161,10 @@ trait SupportsValidationFeatures
 
     private function getRulesFromRuleAttributesOnPublicProperties(): array
     {
+        if (! $this->mapValidatedDataToPublicProperties) {
+            return [];
+        }
+
         return []; // TODO
     }
 
@@ -234,5 +247,17 @@ trait SupportsValidationFeatures
     public function attributes(): array
     {
         return [];
+    }
+
+    public function validate(): static
+    {
+        if (! $this->isValidationRequired()) {
+
+            $this->didValidationPass = true;
+
+            return $this;
+        }
+
+        return $this;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
-use Statix\FormAction\FormAction;
 use Illuminate\Auth\Access\AuthorizationException;
+use Statix\FormAction\FormAction;
 
 // You can toggle whether or not authorization is required
 test('you can toggle whether or not authorization is required', function () {
