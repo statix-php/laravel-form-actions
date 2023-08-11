@@ -3,10 +3,42 @@
 namespace Statix\FormAction\Concerns;
 
 use Illuminate\Validation\Validator;
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
 trait SupportsValidationFeatures
 {
     protected Validator $validator;
+
+    protected function getValidatorInstance(): Validator
+    {
+        if (isset($this->validator)) {
+            return $this->validator;
+        }
+
+        if (method_exists($this, 'validator')) {
+            $validator = $this->app->call([$this, 'validator']);
+
+            if (! $validator instanceof Validator) {
+                throw new \Exception('The validator method must return an instance of '.Validator::class);
+            }
+
+            $this->validator = $validator;
+        } else {
+            /** @var ValidationFactory $factory */
+            $factory = $this->app->make(ValidationFactory::class);
+
+            $this->validator = $factory->make(
+                $this->request->all(),
+                $this->getAllValidationRules(),
+                $this->getAllValidationMessages(),
+                $this->getAllValidationAttributes()
+            );
+
+            $this->validator->stopOnFirstFailure($this->shouldStopOnFirstFailure);
+        }
+
+        return $this->validator;
+    }
 
     protected bool $didValidationPass = false;
 
@@ -249,13 +281,32 @@ trait SupportsValidationFeatures
         return [];
     }
 
-    public function validate(): static
+    public function validateAction(): static
     {
         if (! $this->isValidationRequired()) {
 
             $this->didValidationPass = true;
 
             return $this;
+        }
+
+        $this->runBeforeValidationCallbacks();
+
+        // do validation
+        $validator = $this->getValidatorInstance();
+
+        if ($validator->fails()) {
+            $this->didValidationPass = false;
+            
+            $this->runOnFailedValidationCallbacks();
+        } else {
+            $this->didValidationPass = true;
+
+            if($this->mapValidatedDataToPublicProperties) {
+                $this->attemptToMapValidatedDataToPublicProperties();
+            }
+
+            $this->runAfterValidationCallbacks();
         }
 
         return $this;

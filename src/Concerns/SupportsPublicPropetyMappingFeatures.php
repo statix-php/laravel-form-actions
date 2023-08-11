@@ -22,10 +22,10 @@ trait SupportsPublicPropetyMappingFeatures
         return $this;
     }
 
-    public function attemptToMapValidatedDataToPublicProperties(): void
+    public function attemptToMapValidatedDataToPublicProperties(): static
     {
         if (! $this->mapValidatedDataToPublicProperties) {
-            return;
+            return $this;
         }
 
         /** @var array $validated */
@@ -49,5 +49,7 @@ trait SupportsPublicPropetyMappingFeatures
                 }
             }
         }
+
+        return $this;
     }
 }

@@ -1,11 +1,13 @@
 <?php
 
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Statix\FormAction\FormActionServiceProvider;
+use Statix\FormAction\Tests\Support\Controller;
 
 class TestCase extends Orchestra
 {
@@ -48,6 +50,18 @@ class TestCase extends Orchestra
     protected function getTempDirectory()
     {
         return __DIR__.DIRECTORY_SEPARATOR.'temp';
+    }
+
+    /**
+     * Define routes setup.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     *
+     * @return void
+     */
+    protected function defineRoutes($router)
+    {
+        $router->post('/test', [Controller::class, 'store']);
     }
 }
 
