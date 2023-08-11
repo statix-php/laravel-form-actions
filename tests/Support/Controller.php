@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Statix\FormAction\Tests\Support;
 

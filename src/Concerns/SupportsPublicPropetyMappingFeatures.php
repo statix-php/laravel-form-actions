@@ -35,7 +35,7 @@ trait SupportsPublicPropetyMappingFeatures
 
         $publicProperties = $reflector->getPublicProperties();
 
-        // loop through the public properties 
+        // loop through the public properties
         foreach ($publicProperties as $property) {
             // if the validated data has a key that matches the property name
             if (array_key_exists($property->getName(), $validated)) {
@@ -45,7 +45,7 @@ trait SupportsPublicPropetyMappingFeatures
                 if (gettype($value) == $property->getType()->getName()) {
                     $this->{$property->getName()} = $validated[$property->getName()];
                 } else {
-                    throw new \Exception("The type of the validated data does not match the type of the property.");
+                    throw new \Exception('The type of the validated data does not match the type of the property.');
                 }
             }
         }

@@ -1,6 +1,5 @@
 <?php
 
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -56,7 +55,6 @@ class TestCase extends Orchestra
      * Define routes setup.
      *
      * @param  \Illuminate\Routing\Router  $router
-     *
      * @return void
      */
     protected function defineRoutes($router)
