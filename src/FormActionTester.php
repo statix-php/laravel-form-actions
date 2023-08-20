@@ -48,7 +48,7 @@ class FormActionTester
 
     public function assertUnauthorized(): static
     {
-        // TODO: implement
+        // assert that the action will throw an exception in the future
 
         return $this;
     }
@@ -62,18 +62,6 @@ class FormActionTester
         $actual = $this->action->get($name);
 
         $strict ? PHPUnit::assertSame($value, $actual) : PHPUnit::assertEquals($value, $actual);
-
-        return $this;
-    }
-
-    public function assertSetOld(string $key, mixed $value = null): static
-    {
-        if ($this->action->has($key)) {
-            if ($value != $this->action->get($key)) {
-                throw new \Exception(
-                    "Expected value does not match actual value. \n\nExpected: {$value}\nActual: {$this->action->get($key)}");
-            }
-        }
 
         return $this;
     }

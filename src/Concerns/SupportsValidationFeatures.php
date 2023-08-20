@@ -27,14 +27,17 @@ trait SupportsValidationFeatures
             /** @var ValidationFactory $factory */
             $factory = $this->app->make(ValidationFactory::class);
 
-            $this->validator = $factory->make(
+            /** @var Validator $validator */
+            $validator = $factory->make(
                 $this->request->all(),
                 $this->getAllValidationRules(),
                 $this->getAllValidationMessages(),
                 $this->getAllValidationAttributes()
             );
 
-            $this->validator->stopOnFirstFailure($this->shouldStopOnFirstFailure);
+            $validator->stopOnFirstFailure($this->shouldStopOnFirstFailure);
+
+            $this->validator = $validator;
         }
 
         return $this->validator;
