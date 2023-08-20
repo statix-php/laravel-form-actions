@@ -2,8 +2,8 @@
 
 namespace Statix\FormAction\Concerns;
 
-use Illuminate\Validation\Validator;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Illuminate\Validation\Validator;
 
 trait SupportsValidationFeatures
 {
@@ -300,12 +300,12 @@ trait SupportsValidationFeatures
 
         if ($validator->fails()) {
             $this->didValidationPass = false;
-            
+
             $this->runOnFailedValidationCallbacks();
         } else {
             $this->didValidationPass = true;
 
-            if($this->mapValidatedDataToPublicProperties) {
+            if ($this->mapValidatedDataToPublicProperties) {
                 $this->attemptToMapValidatedDataToPublicProperties();
             }
 

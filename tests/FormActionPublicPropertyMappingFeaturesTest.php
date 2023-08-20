@@ -15,11 +15,11 @@ test('placeholder', function () {
             ];
         }
     };
-    
+
     expect(isset($action->name))->toBeFalse();
 
     $action->attemptToMapValidatedDataToPublicProperties();
 
-    expect(isset($action->name))->toBeTrue();    
+    expect(isset($action->name))->toBeTrue();
     expect($action->name)->toBe('Personal Team');
 });

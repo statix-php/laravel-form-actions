@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Statix\FormAction\Concerns;
 
@@ -24,13 +24,13 @@ trait SuppportAutomaticAuthorizationValidationOnResolve
 
     protected function bootSuppportAutomaticAuthorizationValidationOnResolve(): void
     {
-        if($this->shouldAutomaticallyResolve) {
-            
+        if ($this->shouldAutomaticallyResolve) {
+
             /** @var FormAction $this */
             $this->app->resolving(static::class, function (FormAction $action) {
                 $action->resolve();
             });
-            
+
         }
     }
 
