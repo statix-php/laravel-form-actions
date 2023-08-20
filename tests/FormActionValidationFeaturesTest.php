@@ -1,6 +1,22 @@
 <?php
 
 use Statix\FormAction\FormAction;
+use Statix\FormAction\Inspector;
+use Statix\FormAction\Validation\Rule;
+
+// test the public properties with Rule attributes are discovered
+test('the public properties with Rule attributes are discovered', function () {
+    $action = new class extends FormAction
+    {
+        #[Rule('required')]
+        public $name;
+
+        #[Rule('required')]
+        public $email;
+    };
+
+    $inspector = Inspector::make($action);
+});
 
 // you can toggle whether or not validation is required
 test('you can toggle whether or not validation is required', function () {

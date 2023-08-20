@@ -4,6 +4,10 @@ namespace Statix\FormAction\Concerns;
 
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Validation\Validator;
+use ReflectionProperty;
+use Statix\FormAction\FormAction;
+use Statix\FormAction\Inspector;
+use Statix\FormAction\Validation\Rule;
 
 trait SupportsValidationFeatures
 {
@@ -11,6 +15,7 @@ trait SupportsValidationFeatures
 
     protected function getValidatorInstance(): Validator
     {
+        /** @var FormAction $this */
         if (isset($this->validator)) {
             return $this->validator;
         }
@@ -47,6 +52,7 @@ trait SupportsValidationFeatures
 
     public function validated(string|array|int $key = null, mixed $default = null): mixed
     {
+        /** @var FormAction $this */
         if (! isset($this->validator) && $this->validator instanceof Validator && ! $this->didValidationPass) {
             throw new \Exception('The validator must be set before calling validated()');
         }
@@ -165,6 +171,8 @@ trait SupportsValidationFeatures
     | Validation Rule Features
     |--------------------------------------------------------------------------
     */
+    protected $rulesFromAttributes = [];
+
     public function getAllValidationRules(): array
     {
         return array_merge(
@@ -196,11 +204,25 @@ trait SupportsValidationFeatures
 
     private function getRulesFromRuleAttributesOnPublicProperties(): array
     {
-        if (! $this->mapValidatedDataToPublicProperties) {
-            return [];
+        $inspector = Inspector::make($this);
+
+        $properties = $inspector->findPublicPropertiesWithAttribute(Rule::class);
+
+        foreach ($properties as $property) {
+            /** @var ReflectionProperty $property */
+            $types = $inspector->getPropertyTypeHints($property);
+            $name = $inspector->getPropertyName($property);
+
+            if (count($types) > 0) {
+                // need to merge the types with the rules
+            } else {
+                // only need to add the rules
+            }
         }
 
-        return []; // TODO
+        $rules = [];
+
+        return $rules;
     }
 
     public function rules(): array

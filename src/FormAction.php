@@ -36,7 +36,7 @@ class FormAction
             $method = 'boot'.class_basename($trait);
 
             if (method_exists($this, $method)) {
-                $this->app->call([$this, $method]);
+                $this->{$method}();
             }
         }
     }
