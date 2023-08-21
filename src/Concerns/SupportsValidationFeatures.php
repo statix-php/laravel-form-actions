@@ -175,11 +175,20 @@ trait SupportsValidationFeatures
 
     public function getAllValidationRules(): array
     {
-        return array_merge(
+        $rules = array_merge_recursive(
             $this->getRulesFromTheRulesProperty(),
             $this->getRulesFromTheRulesMethod(),
             $this->getRulesFromRuleAttributesOnPublicProperties(),
         );
+
+        foreach ($rules as $key => $value) {
+            // renumber the array keys, with only unique values
+            if(is_array($value)) {
+                $rules[$key] = array_values(array_unique($value));
+            }
+        }
+
+        return $rules;
     }
 
     private function getRulesFromTheRulesProperty(): array
@@ -199,6 +208,13 @@ trait SupportsValidationFeatures
             throw new \Exception('The rules method must return an array of rules');
         }
 
+        // need to check if the values are pipe delimited rules
+        foreach ($rules as $key => $value) {
+            if (is_string($value) && strpos($value, '|') !== false) {
+                $rules[$key] = explode('|', $value);
+            }
+        }
+
         return $rules;
     }
 
@@ -208,19 +224,21 @@ trait SupportsValidationFeatures
 
         $properties = $inspector->findPublicPropertiesWithAttribute(Rule::class);
 
-        foreach ($properties as $property) {
-            /** @var ReflectionProperty $property */
-            $types = $inspector->getPropertyTypeHints($property);
-            $name = $inspector->getPropertyName($property);
-
-            if (count($types) > 0) {
-                // need to merge the types with the rules
-            } else {
-                // only need to add the rules
-            }
-        }
-
         $rules = [];
+
+        foreach ($properties as $property) {
+
+            /** @var ReflectionProperty $property */
+            $name = $inspector->getPropertyName($property);
+            
+            if($inspector->propertyHasTypehints($property)) {
+                $types = $inspector->getPropertyTypeHints($property);
+            }
+
+            // get the rules from the attribute, without the inspector            
+
+            $rules[$name] = array_unique($types);
+        }
 
         return $rules;
     }

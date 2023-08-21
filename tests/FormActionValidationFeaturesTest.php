@@ -8,14 +8,21 @@ use Statix\FormAction\Validation\Rule;
 test('the public properties with Rule attributes are discovered', function () {
     $action = new class extends FormAction
     {
-        #[Rule('required')]
-        public $name;
+        #[Rule(['required', 'min:3'])]
+        public string $name;
 
-        #[Rule('required')]
-        public $email;
+        protected array $rules = [
+            'name' => 'max:255',
+        ];
     };
 
-    $inspector = Inspector::make($action);
+    $rules = $action->getAllValidationRules();
+
+    // test the rules array has a key of name
+    expect(array_key_exists('name', $rules))->toBeTrue();
+
+    // test the rules name key has a required rule, a max rule, and a string rule, test it has all three disrespective of order
+    expect($rules['name'])->toContain('required', 'max:255', 'string', 'min:3');
 });
 
 // you can toggle whether or not validation is required
@@ -159,7 +166,7 @@ test('the getAllValidationRules discovers rules from the rules method and proper
     };
 
     expect($action->getAllValidationRules())->toBe([
-        'name' => 'required|email',
+        'name' => ['required', 'email'],
     ]);
 });
 

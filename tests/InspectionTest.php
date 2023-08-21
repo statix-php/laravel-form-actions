@@ -21,8 +21,8 @@ test('the inspector can be instantiated using the static make method', function 
     expect($inspector)->toBeInstanceOf(Inspector::class);
 });
 
-// test the inspection can get all public properties
-test('the inspection can get all public properties', function () {
+// test the inspector can get all public properties
+test('the inspector can get all public properties', function () {
     $inspector = new Inspector(new class
     {
         public string $name = 'John Doe';
@@ -68,8 +68,8 @@ test('the inspector can filter public properties with attributes', function () {
     expect($properties[0]->getName())->toBe('name');
 });
 
-// test the inspection can get the type hints of a property
-test('the inspection can get the type hints of a property', function () {
+// test the inspector can get the type hints of a property
+test('the inspector can get the type hints of a property', function () {
     $inspector = new Inspector(new class
     {
         public string $name = 'John Doe';
@@ -79,12 +79,12 @@ test('the inspection can get the type hints of a property', function () {
 
     $typeHints = $inspector->getPropertyTypeHints($properties[0]);
 
-    expect($typeHints)->toHaveCount(1);
-    expect($typeHints[0])->toBe('string');
+    expect($typeHints)->toHaveCount(2);
+    expect($typeHints)->toContain('string', 'required');
 });
 
-// the inspection can get the type hints of a property that allows null
-test('the inspection can get the type hints of a property that allows null', function () {
+// the inspector can get the type hints of a property that allows null
+test('the inspector can get the type hints of a property that allows null', function () {
     $inspector = new Inspector(new class
     {
         public ?string $name = 'John Doe';
@@ -99,8 +99,8 @@ test('the inspection can get the type hints of a property that allows null', fun
     expect($typeHints[1])->toBe('string');
 });
 
-// the inspection can give you the name of a property
-test('the inspection can give you the name of a property', function () {
+// the inspector can give you the name of a property
+test('the inspector can give you the name of a property', function () {
     $inspector = new Inspector(new class
     {
         public ?string $name = 'John Doe';
@@ -111,4 +111,36 @@ test('the inspection can give you the name of a property', function () {
     $name = $inspector->getPropertyName($properties[0]);
 
     expect($name)->toBe('name');
+});
+
+// the inspector can check if a public property exists
+test('the inspector can check if a public property exists', function () {
+    $inspector = new Inspector(new class
+    {
+        public ?string $name = 'John Doe';
+    });
+
+    expect($inspector->hasPublicProperty('name'))->toBeTrue();
+    expect($inspector->hasPublicProperty('age'))->toBeFalse();
+});
+
+// the inspector can check if a public property has a default value
+test('the inspector can check if a public property has a default value', function () {
+    $inspector = new Inspector(new class
+    {
+        public ?string $name = 'John Doe';
+    });
+
+    expect($inspector->doesPublicPropertyHaveDefaultValue('name'))->toBeTrue();
+    expect($inspector->doesPublicPropertyHaveDefaultValue('age'))->toBeFalse();
+});
+
+// the inspector can get the default value of a public property
+test('the inspector can get the default value of a public property', function () {
+    $inspector = new Inspector(new class
+    {
+        public ?string $name = 'John Doe';
+    });
+
+    expect($inspector->getPublicPropertyDefaultValue('name'))->toBe('John Doe');
 });

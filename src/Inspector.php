@@ -53,19 +53,92 @@ class Inspector
 
         if ($type->allowsNull()) {
             $types[] = 'nullable';
+        } else {
+            $types[] = 'required';
         }
 
         if ($type->isBuiltin()) {
             $types[] = $type->getName();
-
-            return $types;
+        } else {
+            dd('TODO: Handle non-builtin types');
         }
 
-        dd($type->getName());
+        return $types;
     }
 
     public function getPropertyName(ReflectionProperty $property): string
     {
         return $property->getName();
+    }
+
+    public function hasPublicProperty(string $name): bool
+    {
+        return $this->reflector->hasProperty($name);
+    }
+
+    public function getPublicProperty(string $name): ReflectionProperty
+    {
+        return $this->reflector->getProperty($name);
+    }
+
+    public function setPublicPropertyValue(string $name, mixed $value): void
+    {
+        $property = $this->getPublicProperty($name);
+
+        $property->setValue($this->object, $value);
+    }
+
+    public function doesPublicPropertyHaveDefaultValue(string $name): bool
+    {
+        if(! $this->hasPublicProperty($name)) {
+            return false;
+        }
+        
+        $property = $this->getPublicProperty($name);
+
+        return $property->isDefault();
+    }
+
+    public function doesPropertyHaveAttributes(ReflectionProperty $property): bool
+    {
+        return count($property->getAttributes()) > 0;
+    }
+
+    public function getPropertyAttributes(ReflectionProperty $property): array
+    {
+        return $property->getAttributes();
+    }
+
+    public function getPublicPropertyDefaultValue(string $name): mixed
+    {
+        if(! $this->hasPublicProperty($name)) {
+            return null;
+        }
+
+        $property = $this->getPublicProperty($name);
+
+        return $property->getDefaultValue();
+    }
+
+    public function isPropertyNullable(ReflectionProperty $property): bool
+    {
+        $type = $property->getType();
+
+        if (! $type) {
+            return false;
+        }
+
+        return $type->allowsNull();
+    }
+
+    public function propertyHasTypehints(ReflectionProperty $property): bool
+    {
+        $type = $property->getType();
+
+        if (! $type) {
+            return false;
+        }
+
+        return true;
     }
 }
