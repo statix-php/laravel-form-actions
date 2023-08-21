@@ -1,7 +1,6 @@
 <?php
 
 use Statix\FormAction\FormAction;
-use Statix\FormAction\Inspector;
 use Statix\FormAction\Validation\Rule;
 
 // test the public properties with Rule attributes are discovered

@@ -183,7 +183,7 @@ trait SupportsValidationFeatures
 
         foreach ($rules as $key => $value) {
             // renumber the array keys, with only unique values
-            if(is_array($value)) {
+            if (is_array($value)) {
                 $rules[$key] = array_values(array_unique($value));
             }
         }
@@ -230,12 +230,12 @@ trait SupportsValidationFeatures
 
             /** @var ReflectionProperty $property */
             $name = $inspector->getPropertyName($property);
-            
-            if($inspector->propertyHasTypehints($property)) {
+
+            if ($inspector->propertyHasTypehints($property)) {
                 $types = $inspector->getPropertyTypeHints($property);
             }
 
-            // get the rules from the attribute, without the inspector            
+            // get the rules from the attribute, without the inspector
 
             $rules[$name] = array_unique($types);
         }

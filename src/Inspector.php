@@ -90,10 +90,10 @@ class Inspector
 
     public function doesPublicPropertyHaveDefaultValue(string $name): bool
     {
-        if(! $this->hasPublicProperty($name)) {
+        if (! $this->hasPublicProperty($name)) {
             return false;
         }
-        
+
         $property = $this->getPublicProperty($name);
 
         return $property->isDefault();
@@ -111,7 +111,7 @@ class Inspector
 
     public function getPublicPropertyDefaultValue(string $name): mixed
     {
-        if(! $this->hasPublicProperty($name)) {
+        if (! $this->hasPublicProperty($name)) {
             return null;
         }
 
