@@ -16,6 +16,8 @@ class FormActionTester
 
     public Request $request;
 
+    protected $result;
+
     public function __construct(string $action, Request $request = null)
     {
         $this->request = $request ?? new Request;
@@ -34,9 +36,18 @@ class FormActionTester
 
     public function call(string $method, array $parameters = []): static
     {
-        $this->action->{$method}(...$parameters);
+        if ($method === 'handle') {
+            $this->result = $this->action->{$method}(...$parameters);
+        } elseif ($method === 'resolve') {
+            $this->action->{$method}(...$parameters);
+        }
 
         return $this;
+    }
+
+    public function thenReturn(): mixed
+    {
+        return $this->result;
     }
 
     public function set(array|string $key, mixed $value = null, bool $replace = false): static

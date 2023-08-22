@@ -34,7 +34,7 @@ trait SuppportAutomaticAuthorizationValidationOnResolve
         }
     }
 
-    protected function resolve(): static
+    public function resolve(): static
     {
         /** @var FormAction $this */
         $this->authorizeAction();

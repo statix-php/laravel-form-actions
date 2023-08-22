@@ -1,14 +1,13 @@
 <?php
 
 use Statix\FormAction\FormAction;
-use Statix\FormAction\Inspector;
 use Statix\FormAction\Validation\Rule;
 
 // test the public properties with Rule attributes are discovered
 test('the public properties with Rule attributes are discovered', function () {
     $action = new class extends FormAction
     {
-        #[Rule(['required', 'min:3'])]
+        #[Rule(['required', 'min:3'], 'unique:teams,name')]
         public string $name;
 
         protected array $rules = [
@@ -22,7 +21,24 @@ test('the public properties with Rule attributes are discovered', function () {
     expect(array_key_exists('name', $rules))->toBeTrue();
 
     // test the rules name key has a required rule, a max rule, and a string rule, test it has all three disrespective of order
-    expect($rules['name'])->toContain('required', 'max:255', 'string', 'min:3');
+    expect($rules['name'])->toContain('required', 'max:255', 'string', 'min:3', 'unique:teams,name');
+});
+
+// test the rule attribute supports object based rules
+test('the rule attribute supports object based rules', function () {
+    $action = new class extends FormAction
+    {
+        #[Rule(new Rule('required_if:true'))]
+        public string $name;
+    };
+
+    $rules = $action->getAllValidationRules();
+
+    // test the rules array has a key of name
+    expect(array_key_exists('name', $rules))->toBeTrue();
+
+    // test the rules name key has a required rule, a max rule, and a string rule, test it has all three disrespective of order
+    expect($rules['name'])->toContain('required_if:true');
 });
 
 // you can toggle whether or not validation is required

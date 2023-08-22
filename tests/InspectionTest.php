@@ -30,7 +30,7 @@ test('the inspector can get all public properties', function () {
         public int $age = 30;
     });
 
-    $properties = $inspector->findPublicProperties();
+    $properties = $inspector->getPublicProperties();
 
     expect($properties)->toHaveCount(2);
 });
@@ -44,7 +44,7 @@ test('the inspector can filter public properties', function () {
         public int $age = 30;
     });
 
-    $properties = $inspector->findPublicPropertiesWhere(function (ReflectionProperty $property) {
+    $properties = $inspector->getPublicPropertiesWhere(function (ReflectionProperty $property) {
         return $property->getName() === 'name';
     });
 
@@ -62,7 +62,7 @@ test('the inspector can filter public properties with attributes', function () {
         public int $age = 30;
     });
 
-    $properties = $inspector->findPublicPropertiesWithAttribute(Rule::class);
+    $properties = $inspector->getPublicPropertiesWithAttribute(Rule::class);
 
     expect($properties)->toHaveCount(1);
     expect($properties[0]->getName())->toBe('name');
@@ -75,7 +75,7 @@ test('the inspector can get the type hints of a property', function () {
         public string $name = 'John Doe';
     });
 
-    $properties = $inspector->findPublicProperties();
+    $properties = $inspector->getPublicProperties();
 
     $typeHints = $inspector->getPropertyTypeHints($properties[0]);
 
@@ -90,7 +90,7 @@ test('the inspector can get the type hints of a property that allows null', func
         public ?string $name = 'John Doe';
     });
 
-    $properties = $inspector->findPublicProperties();
+    $properties = $inspector->getPublicProperties();
 
     $typeHints = $inspector->getPropertyTypeHints($properties[0]);
 
@@ -106,7 +106,7 @@ test('the inspector can give you the name of a property', function () {
         public ?string $name = 'John Doe';
     });
 
-    $properties = $inspector->findPublicProperties();
+    $properties = $inspector->getPublicProperties();
 
     $name = $inspector->getPropertyName($properties[0]);
 
@@ -142,5 +142,42 @@ test('the inspector can get the default value of a public property', function ()
         public ?string $name = 'John Doe';
     });
 
-    expect($inspector->getPublicPropertyDefaultValue('name'))->toBe('John Doe');
+    expect($inspector->getPropertyDefaultValue('name'))->toBe('John Doe');
+});
+
+// the inspector can get a public properties attributes
+test('the inspector can get a public properties attributes', function () {
+    $inspector = new Inspector(new class
+    {
+        #[Rule('required')]
+        #[Rule('min:3')]
+        public ?string $name = 'John Doe';
+    });
+
+    $attributes = $inspector->getPublicPropertyAttributes('name');
+
+    expect($attributes)->toHaveCount(2);
+    expect($attributes[0]->getName())->toBe(Rule::class);
+});
+
+// the inspector can get filtered public properties attributes
+test('the inspector can get filtered public properties attributes', function () {
+
+    #[Attribute(Attribute::TARGET_PROPERTY)]
+    class TestAttribute
+    {
+        //
+    }
+
+    $inspector = new Inspector(new class
+    {
+        #[TestAttribute]
+        #[Rule('required')]
+        public ?string $name = 'John Doe';
+    });
+
+    $attributes = $inspector->getPublicPropertyAttributes('name', Rule::class);
+
+    expect($attributes)->toHaveCount(1);
+    expect($attributes[0]->getName())->toBe(Rule::class);
 });
