@@ -3,6 +3,7 @@
 namespace Statix\FormAction;
 
 use Illuminate\Http\Request;
+use Statix\FormAction\FormAction;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 /**
@@ -18,11 +19,23 @@ class FormActionTester
 
     protected $result;
 
-    public function __construct(string $action, Request $request = null)
+    protected array $methodsCalled = [];
+
+    public function __construct(string|object $action, Request $request = null)
     {
         $this->request = $request ?? new Request;
 
-        $this->action = new $action(request: $this->request);
+        if(is_string($action)) {
+            $action = new $action(request: $this->request);
+        } else {
+            if(! $action instanceof FormAction) {
+                throw new \Exception('The action must be an instance of FormAction');
+            }
+
+            $action->setRequest($this->request);
+        }
+
+        $this->action = $action;
     }
 
     public function actingAs($user, string $driver = null): static
@@ -36,9 +49,11 @@ class FormActionTester
 
     public function call(string $method, array $parameters = []): static
     {
+        $this->methodsCalled[] = $method;
+
         if ($method === 'handle') {
             $this->result = $this->action->{$method}(...$parameters);
-        } elseif ($method === 'resolve') {
+        } else {
             $this->action->{$method}(...$parameters);
         }
 

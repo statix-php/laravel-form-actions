@@ -46,7 +46,7 @@ class FormAction
         return new static($app, $request);
     }
 
-    public static function test(string $action): FormActionTester
+    public static function test(string|object $action): FormActionTester
     {
         return new FormActionTester($action);
     }

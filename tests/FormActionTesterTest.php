@@ -114,3 +114,11 @@ test('the actingAs method works with authorization features', function () {
         ->call('authorizeAction')
         ->assertSet('foo', 'bar');
 });
+
+// the tester can accept an object as the first argument
+test('the tester can accept an object as the first argument', function () {
+
+    $tester = FormAction::test(new class extends FormAction {});
+
+    expect($tester->action)->toBeInstanceOf(FormAction::class);
+});
