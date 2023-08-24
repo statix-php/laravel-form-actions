@@ -4,6 +4,7 @@ namespace Statix\FormAction\Concerns;
 
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Validator;
 use ReflectionProperty;
 use Statix\FormAction\FormAction;
@@ -160,11 +161,21 @@ trait SupportsValidationFeatures
 
     public function runOnFailedValidationCallbacks(): static
     {
+
         foreach ($this->onFailedValidationCallbacks as $callback) {
             $this->app->call($callback, ['action' => $this]);
         }
 
         return $this;
+    }
+
+    public function failedValidation()
+    {
+        if (empty($this->onFailedValidationCallbacks)) {
+            throw new ValidationException($this->getValidatorInstance());
+        }
+
+        $this->runOnFailedValidationCallbacks();
     }
 
     /*
@@ -183,9 +194,10 @@ trait SupportsValidationFeatures
         );
 
         foreach ($rules as $key => $value) {
-            // renumber the array keys, with only unique values
             if (is_array($value)) {
-                $rules[$key] = array_values(array_unique($value));
+                $rules[$key] = array_values(array_unique($value, SORT_REGULAR));
+            } else {
+                $rules[$key] = $value;
             }
         }
 
@@ -240,12 +252,21 @@ trait SupportsValidationFeatures
 
             foreach ($attributes as $attribute) {
                 /** @var ReflectionAttribute $attribute */
-                $types[] = Arr::flatten($attribute->getArguments());
+                $attRules = Arr::flatten($attribute->newInstance()->getRules());
 
-                // todo, handle class based rules, like Rule::unique('teams', 'name'), or new Rule('max:255')
+                // check if the types already has any of the rules
+                foreach ($attRules as $attRule) {
+                    if (in_array($attRule, $types)) {
+                        continue;
+                    }
+
+                    $types[] = $attRule;
+                }
             }
 
-            $rules[$name] = array_values(array_unique(Arr::sort(Arr::flatten($types))));
+            $types = Arr::flatten($types);
+
+            $rules[$name] = array_values(Arr::flatten($types));
         }
 
         return $rules;
@@ -349,7 +370,7 @@ trait SupportsValidationFeatures
         if ($validator->fails()) {
             $this->didValidationPass = false;
 
-            $this->runOnFailedValidationCallbacks();
+            $this->failedValidation();
         } else {
             $this->didValidationPass = true;
 

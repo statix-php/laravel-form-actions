@@ -34,7 +34,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Statix\\FormAction\\": "src/",
+            "Statix\\FormAction\\": "src/"
         }
     },
     "autoload-dev": {

@@ -2,7 +2,7 @@
 
 namespace Statix\FormAction\Concerns;
 
-use Statix\FormAction\Reflector;
+use Statix\FormAction\Inspector;
 
 trait SupportsPublicPropetyMappingFeatures
 {
@@ -31,7 +31,7 @@ trait SupportsPublicPropetyMappingFeatures
         /** @var array $validated */
         $validated = $this->validated();
 
-        $reflector = Reflector::make($this);
+        $reflector = Inspector::make($this);
 
         $publicProperties = $reflector->getPublicProperties();
 

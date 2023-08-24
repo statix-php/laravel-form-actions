@@ -28,7 +28,7 @@ trait SuppportAutomaticAuthorizationValidationOnResolve
 
             /** @var FormAction $this */
             $this->app->resolving(static::class, function (FormAction $action) {
-                $action->resolve();
+                $action->app->call([$action, 'resolve']);
             });
 
         }

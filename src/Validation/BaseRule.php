@@ -2,19 +2,8 @@
 
 namespace Statix\FormAction\Validation;
 
-use Attribute;
-
-#[Attribute(Attribute::IS_REPEATABLE | Attribute::TARGET_PROPERTY)]
 abstract class BaseRule
 {
-    public function __construct(
-        public $rule,
-        protected $attribute = null,
-        protected $as = null,
-        protected $message = null,
-    ) {
-        //
-    }
 }
 
 /**

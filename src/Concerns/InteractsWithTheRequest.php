@@ -13,6 +13,11 @@ trait InteractsWithTheRequest
         return $this;
     }
 
+    public function request(): Request
+    {
+        return $this->request;
+    }
+
     public function has(string|array $key): bool
     {
         return $this->request->has($key);

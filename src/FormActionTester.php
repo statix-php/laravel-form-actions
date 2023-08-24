@@ -3,7 +3,6 @@
 namespace Statix\FormAction;
 
 use Illuminate\Http\Request;
-use Statix\FormAction\FormAction;
 use PHPUnit\Framework\Assert as PHPUnit;
 
 /**
@@ -25,10 +24,10 @@ class FormActionTester
     {
         $this->request = $request ?? new Request;
 
-        if(is_string($action)) {
+        if (is_string($action)) {
             $action = new $action(request: $this->request);
         } else {
-            if(! $action instanceof FormAction) {
+            if (! $action instanceof FormAction) {
                 throw new \Exception('The action must be an instance of FormAction');
             }
 

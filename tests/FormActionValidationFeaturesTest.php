@@ -1,13 +1,15 @@
 <?php
 
+use Illuminate\Validation\ValidationException;
 use Statix\FormAction\FormAction;
+use Statix\FormAction\Tests\Support\TestRuleUppercase;
 use Statix\FormAction\Validation\Rule;
 
 // test the public properties with Rule attributes are discovered
 test('the public properties with Rule attributes are discovered', function () {
     $action = new class extends FormAction
     {
-        #[Rule(['required', 'min:3'], 'unique:teams,name')]
+        #[Rule(['required', 'min:3', 'unique:teams,name'])]
         public string $name;
 
         protected array $rules = [
@@ -28,8 +30,13 @@ test('the public properties with Rule attributes are discovered', function () {
 test('the rule attribute supports object based rules', function () {
     $action = new class extends FormAction
     {
-        #[Rule(new Rule('required_if:true'))]
+        #[Rule([new TestRuleUppercase, 'min:5'])]
         public string $name;
+
+        public function handle()
+        {
+            //
+        }
     };
 
     $rules = $action->getAllValidationRules();
@@ -37,9 +44,11 @@ test('the rule attribute supports object based rules', function () {
     // test the rules array has a key of name
     expect(array_key_exists('name', $rules))->toBeTrue();
 
-    // test the rules name key has a required rule, a max rule, and a string rule, test it has all three disrespective of order
-    expect($rules['name'])->toContain('required_if:true');
-});
+    FormAction::test($action)
+        ->set('name', 'will')
+        ->call('validateAction');
+
+})->expectException(ValidationException::class);
 
 // you can toggle whether or not validation is required
 test('you can toggle whether or not validation is required', function () {
