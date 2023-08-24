@@ -59,10 +59,12 @@ use Statix\FormAction\Validation\Rule;
 
 class ActionName extends FormAction
 {
-    #[Rule(['required', 'string', 'min:3', 'max:255'])] // string and required are explicitly added because we are not using a typehint
+    // string and required are explicitly added because we are not using a typehint
+    #[Rule(['required', 'string', 'min:3', 'max:255'])] 
     public $name;
 
-    #[Rule(['min:3', 'max:255'])] // string and required are implied with the non-nullable string typehint
+    // string and required are implied with the non-nullable string typehint
+    #[Rule(['email', 'unique:users,email'])] 
     public string $email;
 
     // the timezone propery will automatically have the nullable and string rules applied to it based on the nullable typehint
