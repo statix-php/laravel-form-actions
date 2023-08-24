@@ -15,7 +15,7 @@ You can install the package via composer:
 composer require statix-php/laravel-form-actions
 ```
 
-## Usage
+## Creating `FormActions`
 
 Similiar to [Laravel Form Requests](https://laravel.com/docs/validation#form-request-validation), you can create a new `FormAction` using `artisan` and the command below:
 
@@ -45,6 +45,68 @@ class ActionName extends FormAction
     }
 }
 ```
+
+Now that we have our action created, we can start fleshing it out. Let's show how we could use our action to create a new `User`. 
+
+```php
+<?php 
+
+namespace App\Actions;
+
+use App\Models\User;
+use Statix\FormAction\FormAction;
+use Statix\FormAction\Validation\Rule;
+
+class ActionName extends FormAction
+{
+    #[Rule(['required', 'string', 'min:3', 'max:255'])] // string and required are explicitly added because we are not using a typehint
+    public $name;
+
+    #[Rule(['min:3', 'max:255'])] // string and required are implied with the non-nullable string typehint
+    public string $email;
+
+    // the timezone propery will automatically have the nullable and string rules applied to it based on the nullable typehint
+    public ?string $timezone;
+
+    // by default the authorized method returns true, so we could remove this method but will leave it for explicitness
+    public function authorized(): bool 
+    {
+        return true;
+    }
+
+    // the handle method is required
+    public function handle(): User
+    {
+        return User::create([
+            'name' => $this->name,
+            'email' => $this->email,
+            'timezone' => $this->timezone ?? 'UTC',
+        ]);
+    }
+}
+```
+
+Now that our action is stubbed out, lets use it in our routes.
+
+```php
+// routes/web.php
+
+use App\Actions\ActionName;
+
+Route::post('/register', function(ActionName $action) {
+
+    $user = $action->handle();
+
+    // do other stuff with the newly created user
+    auth()->login($user);
+
+    return redirect()->route('dashboard');
+});
+```
+
+You can see we never manually called any authorization or validation methods. Similiar to Laravel `FormRequests`, the actions will automatically check authorization and validation when they are resolved by the container. (This behavior can be disabled).
+
+Awesome, so now let's write some tests for this action!
 
 ## Testing
 
