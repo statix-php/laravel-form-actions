@@ -15,25 +15,35 @@ You can install the package via composer:
 composer require statix-php/laravel-form-actions
 ```
 
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="laravel-form-actions-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-    //
-];
-```
-
 ## Usage
 
+Similiar to [Laravel Form Requests](https://laravel.com/docs/validation#form-request-validation), you can create a new `FormAction` using `artisan` and the command below:
+
+```bash
+php artisan make:form-action ActionName
+```
+
+This will create a class called `ActionName` in the `app\Actions` directory. The contents of the default class is shown below. 
+
 ```php
-$formAction = new Statix\FormAction();
-echo $formAction->echoPhrase('Hello, Statix!');
+<?php 
+
+namespace App\Actions;
+
+use Statix\FormAction\FormAction;
+
+class ActionName extends FormAction
+{
+    public function authorized(): bool
+    {
+        return true;
+    }
+
+    public function handle()
+    {
+        // Do cool things, tell people - Aaron Francis
+    }
+}
 ```
 
 ## Testing
