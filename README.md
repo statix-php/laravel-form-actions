@@ -3,13 +3,11 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/statix-php/laravel-form-actions.svg?style=flat-square)](https://packagist.org/packages/statix-php/laravel-form-actions)
 [![Total Downloads](https://img.shields.io/packagist/dt/statix-php/laravel-form-actions.svg?style=flat-square)](https://packagist.org/packages/statix-php/laravel-form-actions)
 
-This package is what would happen if Laravel Livewire, Spatie's Laravel Data, and Laravel's Form Requests all had a child.
+Laravel Form Actions combines the best features of Spatie's Laravel Data and Laravel's Form Requests, resulting in a powerful and efficient package that simplifies form handling in your Laravel applications.
 
 ## Installation
 
-You can install this package using composer by running the command below. You can check it out on packagist by visiting this page: [https://packagist.org/packages/statix-php/laravel-form-actions](https://packagist.org/packages/statix-php/laravel-form-actions)
-
-You can install the package via composer:
+You can easily install this package using Composer by running the following command. For more details, visit the [Packagist page](https://packagist.org/packages/statix-php/laravel-form-actions).
 
 ```bash
 composer require statix-php/laravel-form-actions
@@ -17,13 +15,13 @@ composer require statix-php/laravel-form-actions
 
 ## Creating `FormActions`
 
-Similiar to [Laravel Form Requests](https://laravel.com/docs/validation#form-request-validation), you can create a new `FormAction` using `artisan` and the command below:
+Similiar to [Laravel Form Requests](https://laravel.com/docs/validation#form-request-validation), you can create a new `FormAction` using Artisan with the following command:
 
 ```bash
 php artisan make:form-action ActionName
 ```
 
-This will create a class called `ActionName` in the `app\Actions` directory. The contents of the default class is shown below. 
+This command will generate a ActionName class in the app\Actions directory. The initial content of the class is as follows:
 
 ```php
 <?php 
@@ -46,7 +44,7 @@ class ActionName extends FormAction
 }
 ```
 
-Now that we have our action created, we can start fleshing it out. Let's show how we could use our action to create a new `User`. 
+Once the action is created, you can start building it out. Let's demonstrate how to use an action to create a new `User`.
 
 ```php
 <?php 
@@ -59,24 +57,19 @@ use Statix\FormAction\Validation\Rule;
 
 class ActionName extends FormAction
 {
-    // string and required are explicitly added because we are not using a typehint
     #[Rule(['required', 'string', 'min:3', 'max:255'])] 
     public $name;
 
-    // string and required are implied with the non-nullable string typehint
     #[Rule(['email', 'unique:users,email'])] 
     public string $email;
 
-    // the timezone propery will automatically have the nullable and string rules applied to it based on the nullable typehint
     public ?string $timezone;
 
-    // by default the authorized method returns true, so we could remove this method but will leave it for explicitness
     public function authorized(): bool 
     {
         return true;
     }
 
-    // the handle method is required
     public function handle(): User
     {
         return User::create([
@@ -88,7 +81,7 @@ class ActionName extends FormAction
 }
 ```
 
-Now that our action is stubbed out, lets use it in our routes.
+With the action in place, let's integrate it into our routes.
 
 ```php
 // routes/web.php
@@ -99,14 +92,13 @@ Route::post('/register', function(ActionName $action) {
 
     $user = $action->handle();
 
-    // do other stuff with the newly created user
     auth()->login($user);
 
     return redirect()->route('dashboard');
 });
 ```
 
-You can see we never manually called any authorization or validation methods. Similiar to Laravel `FormRequests`, the actions will automatically check authorization and validation when they are resolved by the container. (This behavior can be disabled).
+No manual authorization or validation calls are required. Just like Laravel `FormRequest`, the actions automatically handle authorization and validation when they're resolved from the container. (This behavior can be disabled).
 
 Awesome, so now let's write some tests for this action!
 

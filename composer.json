@@ -1,10 +1,11 @@
 {
     "name": "statix-php/laravel-form-actions",
-    "description": "This is my package laravel-form-actions",
+    "description": "Form Requests mixed with Actions for Laravel",
     "keywords": [
         "statix-php",
         "laravel",
-        "laravel-form-actions"
+        "laravel-form-actions",
+        "actions"
     ],
     "homepage": "https://github.com/statix-php/laravel-form-actions",
     "license": "MIT",
