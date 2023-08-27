@@ -6,26 +6,14 @@ use Illuminate\Http\Request;
 
 trait InteractsWithTheRequest
 {
-    public function setRequest(Request $request): static
+    public function get(string $key, mixed $default = null): mixed
     {
-        $this->request = $request;
-
-        return $this;
-    }
-
-    public function request(): Request
-    {
-        return $this->request;
+        return $this->request->get($key, $default);
     }
 
     public function has(string|array $key): bool
     {
         return $this->request->has($key);
-    }
-
-    public function hasAny(string|array $keys): bool
-    {
-        return $this->request->hasAny($keys);
     }
 
     public function hasAll(array $keys): bool
@@ -39,9 +27,28 @@ trait InteractsWithTheRequest
         return true;
     }
 
-    public function get(string $key, mixed $default = null): mixed
+    public function hasAny(string|array $keys): bool
     {
-        return $this->request->get($key, $default);
+        return $this->request->hasAny($keys);
+    }
+
+    public function replace(string|array $key, mixed $value): static
+    {
+        $this->set($key, $value, replace: true);
+
+        return $this;
+    }
+
+    public function request(): Request
+    {
+        return $this->request;
+    }
+
+    public function setRequest(Request $request): static
+    {
+        $this->request = $request;
+
+        return $this;
     }
 
     public function set(string|array $key, mixed $value = null, bool $replace = false): static
@@ -86,13 +93,6 @@ trait InteractsWithTheRequest
         }
 
         $this->set($key, $value, replace: false);
-
-        return $this;
-    }
-
-    public function replace(string|array $key, mixed $value): static
-    {
-        $this->set($key, $value, replace: true);
 
         return $this;
     }

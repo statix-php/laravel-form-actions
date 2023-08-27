@@ -41,18 +41,18 @@ trait SupportsPublicPropetyMappingFeatures
 
             $propertyName = $inspector->getPropertyName($property);
 
-            if(!array_key_exists($propertyName, $validated)) {
+            if (! array_key_exists($propertyName, $validated)) {
                 continue;
             }
 
             $value = $validated[$propertyName];
-            
+
             if (! $inspector->propertyHasTypehints($property)) {
                 $inspector->setPropertyValue($property, $value);
-                
+
                 continue;
             }
-            
+
             $valueType = $this->getNormalizedType($value);
             $propertyTypes = $inspector->getPropertyTypeHints($property);
 
@@ -62,10 +62,10 @@ trait SupportsPublicPropetyMappingFeatures
                     $inspector->setPropertyValue($property, $value);
                 }
             } else {
-                if($valueType === $propertyTypes[0]) {
+                if ($valueType === $propertyTypes[0]) {
                     $inspector->setPropertyValue($property, $value);
                 }
-            }                
+            }
 
         }
 
@@ -76,11 +76,11 @@ trait SupportsPublicPropetyMappingFeatures
     {
         $type = gettype($value);
 
-        if($type === 'object') {
+        if ($type === 'object') {
             $type = get_class($value);
         }
 
-        if($type === 'integer') {
+        if ($type === 'integer') {
             $type = 'int';
         }
 

@@ -73,7 +73,6 @@ class Inspector
             $types[] = $type->getName();
         }
 
-
         return array_values(array_unique($types));
     }
 

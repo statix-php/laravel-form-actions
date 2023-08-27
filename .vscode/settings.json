@@ -15,7 +15,10 @@
         ".gitignore": true,
         "composer.lock": true,
         "phpstan-baseline.neon": true,
-        "phpstan.neon.dist": true
+        "phpstan.neon.dist": true,
+        "CHANGELOG.md": true,
+        "LICENSE.md": true,
+        "phpunit.xml.dist": true
     },
     "hide-files.files": [
         ".vscode",
@@ -25,6 +28,9 @@
         ".gitignore",
         "composer.lock",
         "phpstan-baseline.neon",
-        "phpstan.neon.dist"
+        "phpstan.neon.dist",
+        "CHANGELOG.md",
+        "LICENSE.md",
+        "phpunit.xml.dist"
     ]
 }
