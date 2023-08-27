@@ -353,7 +353,14 @@ trait SupportsValidationFeatures
         return [];
     }
 
-    public function validateAction(): static
+    public function addError(string $key, string $message): static
+    {
+        $this->validator->errors()->add($key, $message);
+
+        return $this;
+    }
+
+    public function validate(): static
     {
         if (! $this->isValidationRequired()) {
 
@@ -380,13 +387,6 @@ trait SupportsValidationFeatures
 
             $this->runAfterValidationCallbacks();
         }
-
-        return $this;
-    }
-
-    public function addError(string $key, string $message): static
-    {
-        $this->validator->errors()->add($key, $message);
 
         return $this;
     }

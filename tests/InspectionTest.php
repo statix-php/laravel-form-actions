@@ -131,8 +131,8 @@ test('the inspector can check if a public property has a default value', functio
         public ?string $name = 'John Doe';
     });
 
-    expect($inspector->doesPublicPropertyHaveDefaultValue('name'))->toBeTrue();
-    expect($inspector->doesPublicPropertyHaveDefaultValue('age'))->toBeFalse();
+    expect($inspector->doesPropertyHaveDefaultValue('name'))->toBeTrue();
+    expect($inspector->doesPropertyHaveDefaultValue('age'))->toBeFalse();
 });
 
 // the inspector can get the default value of a public property
@@ -143,41 +143,4 @@ test('the inspector can get the default value of a public property', function ()
     });
 
     expect($inspector->getPropertyDefaultValue('name'))->toBe('John Doe');
-});
-
-// the inspector can get a public properties attributes
-test('the inspector can get a public properties attributes', function () {
-    $inspector = new Inspector(new class
-    {
-        #[Rule('required')]
-        #[Rule('min:3')]
-        public ?string $name = 'John Doe';
-    });
-
-    $attributes = $inspector->getPublicPropertyAttributes('name');
-
-    expect($attributes)->toHaveCount(2);
-    expect($attributes[0]->getName())->toBe(Rule::class);
-});
-
-// the inspector can get filtered public properties attributes
-test('the inspector can get filtered public properties attributes', function () {
-
-    #[Attribute(Attribute::TARGET_PROPERTY)]
-    class TestAttribute
-    {
-        //
-    }
-
-    $inspector = new Inspector(new class
-    {
-        #[TestAttribute]
-        #[Rule('required')]
-        public ?string $name = 'John Doe';
-    });
-
-    $attributes = $inspector->getPublicPropertyAttributes('name', Rule::class);
-
-    expect($attributes)->toHaveCount(1);
-    expect($attributes[0]->getName())->toBe(Rule::class);
 });

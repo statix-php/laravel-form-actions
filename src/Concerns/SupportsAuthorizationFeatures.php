@@ -105,18 +105,12 @@ trait SupportsAuthorizationFeatures
         $this->runOnFailedAuthorizationCallbacks();
     }
 
-    /**
-     * @TODO: maybe rename this to authorized(): bool
-     * - will free up authorize() for use in the action
-     * - and make similiar to validate() for validation
-     * - instead of the authorizeAction() and validateAction() methods
-     */
-    public function authorize(): bool
+    public function authorized(): bool
     {
         return true;
     }
 
-    public function authorizeAction(): static
+    public function authorize(): static
     {
         if (! $this->isAuthorizationRequired()) {
             return true;
@@ -124,7 +118,7 @@ trait SupportsAuthorizationFeatures
 
         $this->runBeforeAuthorizationCallbacks();
 
-        $authorized = (bool) $this->app->call([$this, 'authorize']);
+        $authorized = (bool) $this->app->call([$this, 'authorized']);
 
         if (! $authorized) {
             $this->failedAuthorization();

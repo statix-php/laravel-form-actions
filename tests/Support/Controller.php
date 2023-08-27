@@ -7,8 +7,8 @@ class Controller
     public function store(CreateTeamAction $action)
     {
         return $action
-            ->authorizeAction()
-            ->validateAction()
+            ->authorize()
+            ->validate()
             ->handle();
     }
 }

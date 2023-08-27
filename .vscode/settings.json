@@ -7,7 +7,24 @@
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
         "**/__pycache__": true,
-        "**/*.git": true
+        "**/*.git": true,
+        ".vscode": true,
+        ".github": true,
+        ".editorconfig": true,
+        ".gitattributes": true,
+        ".gitignore": true,
+        "composer.lock": true,
+        "phpstan-baseline.neon": true,
+        "phpstan.neon.dist": true
     },
-    "hide-files.files": []
+    "hide-files.files": [
+        ".vscode",
+        ".github",
+        ".editorconfig",
+        ".gitattributes",
+        ".gitignore",
+        "composer.lock",
+        "phpstan-baseline.neon",
+        "phpstan.neon.dist"
+    ]
 }

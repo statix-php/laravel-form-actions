@@ -12,7 +12,6 @@ class FormActionServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-form-actions')
-            ->hasConfigFile()
             ->hasCommand(CreateFormActionCommand::class);
     }
 }

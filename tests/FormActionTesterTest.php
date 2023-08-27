@@ -101,7 +101,7 @@ test('the actingAs method works with authorization features', function () {
             });
         }
 
-        public function authorize(): bool
+        public function authorized(): bool
         {
             return auth()->check();
         }
@@ -111,7 +111,7 @@ test('the actingAs method works with authorization features', function () {
 
     FormAction::test(TestAuthorizationAction::class)
         ->actingAs($model)
-        ->call('authorizeAction')
+        ->call('authorize')
         ->assertSet('foo', 'bar');
 });
 

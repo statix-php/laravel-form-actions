@@ -15,7 +15,7 @@ class CreateTeamAction extends FormAction
         //
     }
 
-    public function authorize(): bool
+    public function authorized(): bool
     {
         return auth()->check();
     }

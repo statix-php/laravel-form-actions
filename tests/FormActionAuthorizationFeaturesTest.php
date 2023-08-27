@@ -50,33 +50,33 @@ test('the action provides a default authorize method', function () {
         //
     };
 
-    expect($action->authorize())->toBeTrue();
+    expect($action->authorized())->toBeTrue();
 });
 
 // the action provides a default authorize method that can be overridden
 test('the action provides a default authorize method that can be overridden', function () {
     $action = new class extends FormAction
     {
-        public function authorize(): bool
+        public function authorized(): bool
         {
             return false;
         }
     };
 
-    expect($action->authorize())->toBeFalse();
+    expect($action->authorized())->toBeFalse();
 });
 
 // the action provides default failedAuthorization method, which throws an AuthorizationException
 test('the action provides default failedAuthorization method, which throws an AuthorizationException', function () {
     $action = new class extends FormAction
     {
-        public function authorize(): bool
+        public function authorized(): bool
         {
             return false;
         }
     };
 
-    $action->authorizeAction();
+    $action->authorize();
 
 })->throws(AuthorizationException::class);
 
@@ -84,7 +84,7 @@ test('the action provides default failedAuthorization method, which throws an Au
 test('the action allows you to provide onAuthorizationFailed callback', function () {
     $action = new class extends FormAction
     {
-        public function authorize(): bool
+        public function authorized(): bool
         {
             return false;
         }
@@ -95,7 +95,7 @@ test('the action allows you to provide onAuthorizationFailed callback', function
     });
 
     try {
-        $action->authorizeAction();
+        $action->authorize();
     } catch (AuthorizationException $e) {
         //
     }

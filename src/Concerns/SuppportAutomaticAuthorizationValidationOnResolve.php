@@ -37,9 +37,9 @@ trait SuppportAutomaticAuthorizationValidationOnResolve
     public function resolve(): static
     {
         /** @var FormAction $this */
-        $this->authorizeAction();
+        $this->authorize();
 
-        $this->validateAction();
+        $this->validate();
 
         return $this;
     }

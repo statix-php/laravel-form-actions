@@ -71,25 +71,30 @@ class Inspector
         return $property->getName();
     }
 
-    public function getPublicProperty(string $name): ReflectionProperty
+    public function setPropertyValue(ReflectionProperty|string $property, mixed $value): static
     {
-        return $this->reflector->getProperty($name);
-    }
+        if (is_string($property)) {
+            if (! $this->hasProperty($property)) {
+                return $this;
+            }
 
-    public function setPublicPropertyValue(string $name, mixed $value): void
-    {
-        $property = $this->getPublicProperty($name);
-
-        $property->setValue($this->object, $value);
-    }
-
-    public function doesPublicPropertyHaveDefaultValue(string $name): bool
-    {
-        if (! $this->hasPublicProperty($name)) {
-            return false;
+            $property = $this->getProperty($property);
         }
 
-        $property = $this->getPublicProperty($name);
+        $property->setValue($this->object, $value);
+
+        return $this;
+    }
+
+    public function doesPropertyHaveDefaultValue(ReflectionProperty|string $property): bool
+    {
+        if (is_string($property)) {
+            if (! $this->hasProperty($property)) {
+                return false;
+            }
+
+            $property = $this->getProperty($property);
+        }
 
         return $property->isDefault();
     }
@@ -124,30 +129,6 @@ class Inspector
         return array_values(array_filter($attributes, function ($attribute) use ($type) {
             return $attribute->getName() === $type;
         }));
-    }
-
-    public function getPublicPropertyAttributes(ReflectionProperty|string $name, string $type = null): array
-    {
-        if (! $this->hasPublicProperty($name)) {
-            return [];
-        }
-
-        if (is_string($name)) {
-            $property = $this->getPublicProperty($name);
-        } else {
-            $property = $name;
-        }
-
-        $attributes = $this->getPropertyAttributes($property);
-
-        // filter by type
-        if ($type) {
-            $attributes = array_values(array_filter($attributes, function ($attribute) use ($type) {
-                return $attribute->getName() === $type;
-            }));
-        }
-
-        return $attributes;
     }
 
     public function hasProperty(string $name): bool
@@ -193,13 +174,15 @@ class Inspector
         return $this->reflector->getProperty($name);
     }
 
-    public function getPropertyDefaultValue(string $name): mixed
+    public function getPropertyDefaultValue(ReflectionProperty|string $property): mixed
     {
-        if (! $this->hasProperty($name)) {
-            return null;
-        }
+        if (is_string($property)) {
+            if (! $this->hasProperty($property)) {
+                return null;
+            }
 
-        $property = $this->getProperty($name);
+            $property = $this->getProperty($property);
+        }
 
         return $property->getDefaultValue();
     }

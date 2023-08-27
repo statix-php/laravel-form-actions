@@ -35,7 +35,7 @@ test('example use case 2', function () {
         #[Rule(['required', 'email'])]
         public string $email;
 
-        public function authorize(): bool
+        public function authorized(): bool
         {
             return true;
         }

@@ -46,7 +46,7 @@ test('the rule attribute supports object based rules', function () {
 
     FormAction::test($action)
         ->set('name', 'will')
-        ->call('validateAction');
+        ->call('validate');
 
 })->expectException(ValidationException::class);
 

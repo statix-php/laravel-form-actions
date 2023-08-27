@@ -6,17 +6,12 @@ use Statix\FormAction\FormAction;
 
 class {{ CLASS_NAME }} extends FormAction
 {
-    public function authorize(): bool
+    public function authorized(): bool
     {
         return true;
     }
 
-    public function rules(): array
-    {
-        return [];
-    }
-
-    public function handle(): void
+    public function handle()
     {
         //
     }
