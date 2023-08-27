@@ -34,6 +34,9 @@ trait SuppportAutomaticAuthorizationValidationOnResolve
         }
     }
 
+    /**
+     * Run action authorization and validation.
+     */
     public function resolve(): static
     {
         /** @var FormAction $this */
