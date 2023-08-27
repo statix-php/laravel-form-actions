@@ -2,11 +2,10 @@
 
 namespace Statix\FormAction;
 
-use ReflectionUnionType;
 use ReflectionClass;
 use ReflectionIntersectionType;
-use ReflectionNamedType;
 use ReflectionProperty;
+use ReflectionUnionType;
 
 class Inspector
 {
@@ -54,11 +53,11 @@ class Inspector
 
         $types = [];
 
-        if($type instanceof ReflectionUnionType || $type instanceof ReflectionIntersectionType) {
+        if ($type instanceof ReflectionUnionType || $type instanceof ReflectionIntersectionType) {
             foreach ($type->getTypes() as $subType) {
                 if ($subType->isBuiltin()) {
 
-                    if($subType->allowsNull()) {
+                    if ($subType->allowsNull()) {
                         $types[] = 'nullable';
                     } else {
                         $types[] = 'required';
@@ -71,8 +70,8 @@ class Inspector
             }
         } else {
             if ($type->isBuiltin()) {
-                
-                if($type->allowsNull()) {
+
+                if ($type->allowsNull()) {
                     $types[] = 'nullable';
                 } else {
                     $types[] = 'required';

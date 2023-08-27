@@ -93,7 +93,7 @@ trait SupportsPublicPropetyMappingFeatures
 
                 $value = $validated[$propertyName];
 
-                if(!$inspector->propertyHasTypehints($property)) {
+                if (! $inspector->propertyHasTypehints($property)) {
                     $inspector->setPropertyValue($property, $value);
 
                     continue;
@@ -102,14 +102,14 @@ trait SupportsPublicPropetyMappingFeatures
                 $propertyTypes = $inspector->getPropertyTypeHints($property);
 
                 if (count($propertyTypes) > 1) {
-                    
+
                     $valueType = gettype($value);
 
-                    if($valueType === 'integer') {
+                    if ($valueType === 'integer') {
                         $valueType = 'int';
                     }
 
-                    if(in_array($valueType, $propertyTypes)) {
+                    if (in_array($valueType, $propertyTypes)) {
                         $inspector->setPropertyValue($property, $value);
                     }
                 } else {
@@ -125,5 +125,4 @@ trait SupportsPublicPropetyMappingFeatures
 
         return $this;
     }
-
 }
