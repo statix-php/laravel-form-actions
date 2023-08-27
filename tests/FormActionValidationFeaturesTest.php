@@ -18,7 +18,7 @@ test('the public properties with Rule attributes are discovered', function () {
     };
 
     $rules = $action->getAllValidationRules();
-
+    
     // test the rules array has a key of name
     expect(array_key_exists('name', $rules))->toBeTrue();
 

@@ -2,7 +2,10 @@
 
 namespace Statix\FormAction;
 
+use ReflectionUnionType;
 use ReflectionClass;
+use ReflectionIntersectionType;
+use ReflectionNamedType;
 use ReflectionProperty;
 
 class Inspector
@@ -51,19 +54,38 @@ class Inspector
 
         $types = [];
 
-        if ($type->allowsNull()) {
-            $types[] = 'nullable';
+        if($type instanceof ReflectionUnionType || $type instanceof ReflectionIntersectionType) {
+            foreach ($type->getTypes() as $subType) {
+                if ($subType->isBuiltin()) {
+
+                    if($subType->allowsNull()) {
+                        $types[] = 'nullable';
+                    } else {
+                        $types[] = 'required';
+                    }
+
+                    $types[] = $subType->getName();
+                } else {
+                    dd('TODO: Handle non-builtin types');
+                }
+            }
         } else {
-            $types[] = 'required';
+            if ($type->isBuiltin()) {
+                
+                if($type->allowsNull()) {
+                    $types[] = 'nullable';
+                } else {
+                    $types[] = 'required';
+                }
+
+                $types[] = $type->getName();
+
+            } else {
+                dd('TODO: Handle non-builtin types');
+            }
         }
 
-        if ($type->isBuiltin()) {
-            $types[] = $type->getName();
-        } else {
-            dd('TODO: Handle non-builtin types');
-        }
-
-        return $types;
+        return array_values(array_unique($types));
     }
 
     public function getPropertyName(ReflectionProperty $property): string

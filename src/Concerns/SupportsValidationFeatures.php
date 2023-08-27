@@ -371,7 +371,6 @@ trait SupportsValidationFeatures
 
         $this->runBeforeValidationCallbacks();
 
-        // do validation
         $validator = $this->getValidatorInstance();
 
         if ($validator->fails()) {

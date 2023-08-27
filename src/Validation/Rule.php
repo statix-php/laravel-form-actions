@@ -9,8 +9,6 @@ class Rule
 {
     public function __construct(
         public $rule,
-        protected $attribute = null,
-        protected $as = null,
         protected $message = null,
     ) {
         //

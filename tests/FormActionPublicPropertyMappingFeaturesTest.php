@@ -23,3 +23,43 @@ test('placeholder', function () {
     expect(isset($action->name))->toBeTrue();
     expect($action->name)->toBe('Personal Team');
 });
+
+test('it supports mapping to public properties with union types', function () {
+    $action = new class extends FormAction
+    {
+        public string|int $id;
+
+        public function validated(string|array|int $key = null, mixed $default = null): mixed
+        {
+            return [
+                'id' => 1,
+            ];
+        }
+    };
+
+    expect(isset($action->id))->toBeFalse();
+
+    $action->attemptToMapValidatedDataToPublicProperties();
+
+    expect(isset($action->id))->toBeTrue();
+    expect($action->id)->toBe(1);
+
+    $action = new class extends FormAction
+    {
+        public string|int $id;
+
+        public function validated(string|array|int $key = null, mixed $default = null): mixed
+        {
+            return [
+                'id' => '1',
+            ];
+        }
+    };
+
+    expect(isset($action->id))->toBeFalse();
+
+    $action->attemptToMapValidatedDataToPublicProperties();
+
+    expect(isset($action->id))->toBeTrue();
+    expect($action->id)->toBe('1');
+});
