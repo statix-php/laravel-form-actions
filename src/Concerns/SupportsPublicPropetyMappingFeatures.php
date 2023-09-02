@@ -3,6 +3,7 @@
 namespace Statix\FormAction\Concerns;
 
 use ReflectionProperty;
+use Statix\FormAction\Attributes\Computed;
 use Statix\FormAction\Inspector;
 
 trait SupportsPublicPropetyMappingFeatures
@@ -40,6 +41,11 @@ trait SupportsPublicPropetyMappingFeatures
         foreach ($publicProperties as $property) {
 
             $propertyName = $inspector->getPropertyName($property);
+
+            // skip the property if it has a Computed attribute
+            if ($inspector->doesPropertyHaveAttributes($property, Computed::class)) {
+                continue;
+            }
 
             if (! array_key_exists($propertyName, $validated)) {
                 continue;

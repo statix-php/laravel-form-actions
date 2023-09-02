@@ -3,13 +3,13 @@
 use Illuminate\Validation\ValidationException;
 use Statix\FormAction\FormAction;
 use Statix\FormAction\Tests\Support\TestRuleUppercase;
-use Statix\FormAction\Validation\Rule;
+use Statix\FormAction\Validation\Rules;
 
 // test the public properties with Rule attributes are discovered
 test('the public properties with Rule attributes are discovered', function () {
     $action = new class extends FormAction
     {
-        #[Rule(['required', 'min:3', 'unique:teams,name'])]
+        #[Rules(['required', 'min:3', 'unique:teams,name'])]
         public string $name;
 
         protected array $rules = [
@@ -30,7 +30,7 @@ test('the public properties with Rule attributes are discovered', function () {
 test('the rule attribute supports object based rules', function () {
     $action = new class extends FormAction
     {
-        #[Rule([new TestRuleUppercase, 'min:5'])]
+        #[Rules([new TestRuleUppercase, 'min:5'])]
         public string $name;
 
         public function handle()

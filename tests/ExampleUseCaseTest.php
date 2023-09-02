@@ -2,7 +2,7 @@
 
 use Statix\FormAction\FormAction;
 use Statix\FormAction\Tests\Support\TestModel;
-use Statix\FormAction\Validation\Rule;
+use Statix\FormAction\Validation\Rules;
 
 // an example use case
 test('example use case 1', function () {
@@ -29,10 +29,10 @@ test('example use case 2', function () {
 
     class ExampleUseCase2 extends FormAction
     {
-        #[Rule(['required', 'string', 'min:3', 'max:255'])]
+        #[Rules(['required', 'string', 'min:3', 'max:255'])]
         public string $name;
 
-        #[Rule(['required', 'email'])]
+        #[Rules(['required', 'email'])]
         public string $email;
 
         public function authorized(): bool

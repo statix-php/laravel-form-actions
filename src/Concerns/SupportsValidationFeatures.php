@@ -9,7 +9,7 @@ use Illuminate\Validation\Validator;
 use ReflectionProperty;
 use Statix\FormAction\FormAction;
 use Statix\FormAction\Inspector;
-use Statix\FormAction\Validation\Rule;
+use Statix\FormAction\Validation\Rules;
 
 trait SupportsValidationFeatures
 {
@@ -237,7 +237,7 @@ trait SupportsValidationFeatures
 
         $inspector = Inspector::make($this);
 
-        $properties = $inspector->getPublicPropertiesWithAttribute(Rule::class);
+        $properties = $inspector->getPublicPropertiesWithAttribute(Rules::class);
 
         foreach ($properties as $property) {
 
@@ -248,7 +248,7 @@ trait SupportsValidationFeatures
                 $types = $inspector->getPropertyTypeHints($property);
             }
 
-            $attributes = $inspector->getPropertyAttributes($property, Rule::class);
+            $attributes = $inspector->getPropertyAttributes($property, Rules::class);
 
             foreach ($attributes as $attribute) {
                 /** @var ReflectionAttribute $attribute */

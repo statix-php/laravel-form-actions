@@ -6,6 +6,7 @@ use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Request;
 use Statix\FormAction\Concerns\InteractsWithTheRequest;
 use Statix\FormAction\Concerns\SupportsAuthorizationFeatures;
+use Statix\FormAction\Concerns\SupportsComputedAttributeFeatures;
 use Statix\FormAction\Concerns\SupportsPublicPropetyMappingFeatures;
 use Statix\FormAction\Concerns\SupportsValidationFeatures;
 use Statix\FormAction\Concerns\SuppportAutomaticAuthorizationValidationOnResolve;
@@ -15,6 +16,7 @@ class FormAction
     use InteractsWithTheRequest,
         SupportsAuthorizationFeatures,
         SupportsValidationFeatures,
+        SupportsComputedAttributeFeatures,
         SupportsPublicPropetyMappingFeatures,
         SuppportAutomaticAuthorizationValidationOnResolve;
 
@@ -25,10 +27,10 @@ class FormAction
         }
 
         if (! $request) {
-            $this->request = request();
+            $request = request();
         }
 
-        $this->setRequest($this->request);
+        $this->setRequest($request);
 
         $this->configure();
 

@@ -1,7 +1,7 @@
 <?php
 
 use Statix\FormAction\Inspector;
-use Statix\FormAction\Validation\Rule;
+use Statix\FormAction\Validation\Rules;
 
 // test the inspector can be instantiated given an object
 test('the inspector can be instantiated given an object', function () {
@@ -56,13 +56,13 @@ test('the inspector can filter public properties', function () {
 test('the inspector can filter public properties with attributes', function () {
     $inspector = new Inspector(new class
     {
-        #[Rule('required')]
+        #[Rules('required')]
         public string $name = 'John Doe';
 
         public int $age = 30;
     });
 
-    $properties = $inspector->getPublicPropertiesWithAttribute(Rule::class);
+    $properties = $inspector->getPublicPropertiesWithAttribute(Rules::class);
 
     expect($properties)->toHaveCount(1);
     expect($properties[0]->getName())->toBe('name');

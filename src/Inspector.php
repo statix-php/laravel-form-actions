@@ -4,6 +4,7 @@ namespace Statix\FormAction;
 
 use ReflectionClass;
 use ReflectionIntersectionType;
+use ReflectionMethod;
 use ReflectionProperty;
 use ReflectionUnionType;
 
@@ -217,5 +218,29 @@ class Inspector
         }
 
         return true;
+    }
+
+    public function hasMethod(string $method): bool
+    {
+        return $this->reflector->hasMethod($method);
+    }
+
+    public function getMethod(string $method): ReflectionMethod
+    {
+        return $this->reflector->getMethod($method);
+    }
+
+    public function doesMethodHaveArguments(ReflectionMethod|string $method): bool
+    {
+        if (is_string($method) && ! $this->hasMethod($method)) {
+            return false;
+        }
+
+        if (is_string($method)) {
+            $method = $this->getMethod($method);
+        }
+
+        /** @var ReflectionMethod $method */
+        return $method->getNumberOfParameters() > 0;
     }
 }

@@ -53,14 +53,14 @@ namespace App\Actions;
 
 use App\Models\User;
 use Statix\FormAction\FormAction;
-use Statix\FormAction\Validation\Rule;
+use Statix\FormAction\Validation\Rules;
 
 class ActionName extends FormAction
 {
-    #[Rule(['required', 'string', 'min:3', 'max:255'])] 
+    #[Rules(['required', 'string', 'min:3', 'max:255'])] 
     public $name;
 
-    #[Rule(['email', 'unique:users,email'])] 
+    #[Rules(['email', 'unique:users,email'])] 
     public string $email;
 
     public ?string $timezone;
