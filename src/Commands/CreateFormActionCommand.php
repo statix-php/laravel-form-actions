@@ -37,7 +37,7 @@ class CreateFormActionCommand extends Command
     {
         // if the name is already set, return it
         if ($this->argument('name')) {
-            return str()->studly($this->argument('name'))->trim();
+            return str($this->argument('name'))->studly()->trim();
         }
 
         $name = $this->ask('What should the form action be called');
@@ -48,17 +48,17 @@ class CreateFormActionCommand extends Command
             return $this->determineName();
         }
 
-        return str()->studly($name)->trim();
+        return str($name)->studly()->trim();
     }
 
     protected function determineNamespace(): string
     {
         // if the namespace is already set, return it
         if ($this->option('namespace')) {
-            return str()->studly($this->option('namespace'))->trim();
+            return str($this->option('namespace'))->studly()->trim();
         }
 
-        return str()->studly('App\\FormActions')->trim();
+        return str('App\\FormActions')->studly()->trim();
     }
 
     protected function getStub(): string
