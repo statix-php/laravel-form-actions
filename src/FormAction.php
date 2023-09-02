@@ -15,9 +15,9 @@ class FormAction
 {
     use InteractsWithTheRequest,
         SupportsAuthorizationFeatures,
-        SupportsValidationFeatures,
         SupportsComputedAttributeFeatures,
         SupportsPublicPropetyMappingFeatures,
+        SupportsValidationFeatures,
         SuppportAutomaticAuthorizationValidationOnResolve;
 
     public function __construct(protected ?Container $app = null, protected ?Request $request = null)
