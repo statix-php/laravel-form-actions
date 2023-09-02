@@ -173,7 +173,7 @@ test('the computed method can access validated data through the validated method
         {
             return $this->user->name;
         }
-    };
+    }
 
     $action = new TestClass2(request: new Request([
         'name' => 'John Doe',

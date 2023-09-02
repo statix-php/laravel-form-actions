@@ -18,7 +18,7 @@ class Computed
     {
         $inspector = Inspector::make($action);
 
-        if(is_null($this->method)) {
+        if (is_null($this->method)) {
             $this->method = 'get'.ucfirst($property).'Property';
         }
 
