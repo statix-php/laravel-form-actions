@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class CreateFormActionCommand extends Command
 {
-    public $signature = 'make:form-action {name?} {--namespace="App\\FormActions"}';
+    public $signature = 'make:form-action {name?} {--namespace=App\\Actions}';
 
     public $description = 'Create a new form action';
 
@@ -22,7 +22,13 @@ class CreateFormActionCommand extends Command
 
         $stubContents = str_replace('{{ NAMESPACE }}', $namespace, $stubContents);
 
-        $outputPath = base_path("app/FormActions/{$name}.php");
+        $outputDirectory = base_path("app/Actions");
+
+        if (! is_dir($outputDirectory)) {
+            mkdir($outputDirectory, 0755, true);
+        }
+
+        $outputPath = base_path("app/Actions/{$name}.php");
 
         file_put_contents($outputPath, $stubContents);
 
@@ -58,7 +64,7 @@ class CreateFormActionCommand extends Command
             return str($this->option('namespace'))->studly()->trim();
         }
 
-        return str('App\\FormActions')->studly()->trim();
+        return str('App\\Actions')->studly()->trim();
     }
 
     protected function getStub(): string

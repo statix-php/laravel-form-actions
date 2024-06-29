@@ -28,7 +28,10 @@ class Computed
 
         $method = $inspector->getMethod($this->method);
 
-        $method->setAccessible(true);
+        // if the method is not public, we need to set it to public
+        if(! $method->isPublic()) {
+            $method->setAccessible(true);
+        }
 
         if (! $inspector->doesMethodHaveArguments($this->method)) {
             $result = $method->invoke($action);
@@ -36,7 +39,10 @@ class Computed
             $result = $method->invoke($action, ...$this->parameters);
         }
 
-        $method->setAccessible(false);
+        // if the method was not public, we need to set it back to private
+        if(! $method->isPublic()) {
+            $method->setAccessible(false);
+        }
 
         return $result;
     }

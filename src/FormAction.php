@@ -43,6 +43,18 @@ class FormAction
         }
     }
 
+    public static function fromArray(array $data)
+    {
+        // TODO: implement
+        // instead of using the request, we can just use the data
+    }
+
+    public static function fromLivewire($componentOrForm)
+    {
+        // TODO: implement
+        // instead of using the request, we can just use the data from the component / form
+    }
+
     public static function make(Container $app = null, Request $request = null): static
     {
         return new static($app, $request);
