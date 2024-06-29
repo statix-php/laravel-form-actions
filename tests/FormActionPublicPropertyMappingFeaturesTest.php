@@ -9,7 +9,7 @@ test('placeholder', function () {
     {
         public string $name;
 
-        public function validated(string|array|int $key = null, mixed $default = null): mixed
+        public function validated(string|array|int|null $key = null, mixed $default = null): mixed
         {
             return [
                 'name' => 'Personal Team',
@@ -30,7 +30,7 @@ test('it supports mapping to public properties with union types', function () {
     {
         public string|int $id;
 
-        public function validated(string|array|int $key = null, mixed $default = null): mixed
+        public function validated(string|array|int|null $key = null, mixed $default = null): mixed
         {
             return [
                 'id' => 1,
@@ -49,7 +49,7 @@ test('it supports mapping to public properties with union types', function () {
     {
         public string|int $id;
 
-        public function validated(string|array|int $key = null, mixed $default = null): mixed
+        public function validated(string|array|int|null $key = null, mixed $default = null): mixed
         {
             return [
                 'id' => '1',
@@ -71,7 +71,7 @@ test('it supports non-builtin types', function () {
     {
         public stdClass $user;
 
-        public function validated(string|array|int $key = null, mixed $default = null): mixed
+        public function validated(string|array|int|null $key = null, mixed $default = null): mixed
         {
             return [
                 'user' => new stdClass(),
@@ -90,7 +90,7 @@ test('it supports non-builtin types', function () {
     {
         public TestModel $model;
 
-        public function validated(string|array|int $key = null, mixed $default = null): mixed
+        public function validated(string|array|int|null $key = null, mixed $default = null): mixed
         {
             $model = new TestModel();
 

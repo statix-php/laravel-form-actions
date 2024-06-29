@@ -52,7 +52,7 @@ trait SupportsValidationFeatures
 
     protected bool $didValidationPass = false;
 
-    public function validated(string|array|int $key = null, mixed $default = null): mixed
+    public function validated(string|array|int|null $key = null, mixed $default = null): mixed
     {
         /** @var FormAction $this */
         if (! isset($this->validator) && $this->validator instanceof Validator && ! $this->didValidationPass) {

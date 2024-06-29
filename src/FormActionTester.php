@@ -20,7 +20,7 @@ class FormActionTester
 
     protected array $methodsCalled = [];
 
-    public function __construct(string|object $action, Request $request = null)
+    public function __construct(string|object $action, ?Request $request = null)
     {
         $this->request = $request ?? new Request;
 
@@ -37,7 +37,7 @@ class FormActionTester
         $this->action = $action;
     }
 
-    public function actingAs($user, string $driver = null): static
+    public function actingAs($user, ?string $driver = null): static
     {
         auth()->guard($driver)->setUser($user);
 

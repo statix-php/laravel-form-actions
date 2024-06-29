@@ -5,18 +5,14 @@ use Statix\FormAction\Validation\Rules;
 
 // test the inspector can be instantiated given an object
 test('the inspector can be instantiated given an object', function () {
-    $inspector = new Inspector(new class
-    {
-    });
+    $inspector = new Inspector(new class {});
 
     expect($inspector)->toBeInstanceOf(Inspector::class);
 });
 
 // the inspector can be instantiated using the static make method
 test('the inspector can be instantiated using the static make method', function () {
-    $inspector = Inspector::make(new class
-    {
-    });
+    $inspector = Inspector::make(new class {});
 
     expect($inspector)->toBeInstanceOf(Inspector::class);
 });

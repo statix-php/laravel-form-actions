@@ -15,9 +15,9 @@ class FormAction
 {
     use InteractsWithTheRequest,
         SupportsAuthorizationFeatures,
-        SupportsValidationFeatures,
         SupportsComputedAttributeFeatures,
         SupportsPublicPropetyMappingFeatures,
+        SupportsValidationFeatures,
         SuppportAutomaticAuthorizationValidationOnResolve;
 
     public function __construct(protected ?Container $app = null, protected ?Request $request = null)
@@ -55,7 +55,7 @@ class FormAction
         // instead of using the request, we can just use the data from the component / form
     }
 
-    public static function make(Container $app = null, Request $request = null): static
+    public static function make(?Container $app = null, ?Request $request = null): static
     {
         return new static($app, $request);
     }

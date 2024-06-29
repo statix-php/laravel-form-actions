@@ -110,7 +110,7 @@ class Inspector
         return $property->isDefault();
     }
 
-    public function doesPropertyHaveAttributes(ReflectionProperty $property, string $type = null): bool
+    public function doesPropertyHaveAttributes(ReflectionProperty $property, ?string $type = null): bool
     {
         $attributes = $property->getAttributes();
 
@@ -129,7 +129,7 @@ class Inspector
         return count($attributes) > 0;
     }
 
-    public function getPropertyAttributes(ReflectionProperty $property, string $type = null): array
+    public function getPropertyAttributes(ReflectionProperty $property, ?string $type = null): array
     {
         if (! $type) {
             return $property->getAttributes();

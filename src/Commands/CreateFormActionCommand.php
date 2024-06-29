@@ -22,7 +22,7 @@ class CreateFormActionCommand extends Command
 
         $stubContents = str_replace('{{ NAMESPACE }}', $namespace, $stubContents);
 
-        $outputDirectory = base_path("app/Actions");
+        $outputDirectory = base_path('app/Actions');
 
         if (! is_dir($outputDirectory)) {
             mkdir($outputDirectory, 0755, true);

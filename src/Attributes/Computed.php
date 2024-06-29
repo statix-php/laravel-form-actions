@@ -29,7 +29,7 @@ class Computed
         $method = $inspector->getMethod($this->method);
 
         // if the method is not public, we need to set it to public
-        if(! $method->isPublic()) {
+        if (! $method->isPublic()) {
             $method->setAccessible(true);
         }
 
@@ -40,7 +40,7 @@ class Computed
         }
 
         // if the method was not public, we need to set it back to private
-        if(! $method->isPublic()) {
+        if (! $method->isPublic()) {
             $method->setAccessible(false);
         }
 
